@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  Modal,
-  StyleSheet,
-  TextInput,
-  View
-} from "react-native";
+import { Alert, Modal, StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { THEME } from "../theme";
 import { AppButton } from "./ui/AppButton";
