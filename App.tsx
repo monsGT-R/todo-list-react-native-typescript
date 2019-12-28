@@ -1,11 +1,9 @@
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 import React, { useState } from "react";
-import { Alert } from "react-native";
-import { MainScreen } from "./src/screens/MainScreen";
-import { TodoScreen } from "./src/screens/TodoScreen";
 import { MainLayout } from "./src/MainLayout";
 import { TodoState } from "./src/context/todo/TodoState";
+import { ScreenState } from "./src/context/screen/ScreenState";
 
 async function loadAplication() {
   await Font.loadAsync({
@@ -28,8 +26,10 @@ export default function App() {
   }
 
   return (
-    <TodoState>
-      <MainLayout />
-    </TodoState>
+    <ScreenState>
+      <TodoState>
+        <MainLayout />
+      </TodoState>
+    </ScreenState>
   );
 }
