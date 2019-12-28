@@ -7,7 +7,8 @@ import {
   FETCH_TODOS,
   HIDE_LOADER,
   REMOVE_TODO,
-  SHOW_ERROR, SHOW_LOADER,
+  SHOW_ERROR,
+  SHOW_LOADER,
   UPDATE_TODO
 } from "../types";
 import { ScreenContext } from "../screen/screenContext";
@@ -59,8 +60,8 @@ export const TodoState = ({ children }) => {
   };
 
   const fetchTodos = async () => {
-    showLoader()
-    clearError()
+    showLoader();
+    clearError();
     try {
       const response = await fetch(
         "https://rn-todo-app-10052.firebaseio.com/todos.json",
@@ -74,14 +75,27 @@ export const TodoState = ({ children }) => {
       const todos = Object.keys(data).map(key => ({ ...data[key], id: key }));
       dispatch({ type: FETCH_TODOS, todos });
     } catch (e) {
-      showError('Что-то пошло не так...')
-      console.log(e)
+      showError("Что-то пошло не так...");
+      console.log(e);
     } finally {
-      hideLoader()
+      hideLoader();
     }
   };
 
-  const updateTodo = (id, title) => dispatch({ type: UPDATE_TODO, id, title });
+  const updateTodo = async (id, title) => {
+    clearError();
+    try {
+      await fetch(`https://rn-todo-app-10052.firebaseio.com/todos/${id}.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+      });
+    } catch (e) {
+      showError("Что-то пошло не так...");
+      console.log(e);
+    }
+    dispatch({ type: UPDATE_TODO, id, title });
+  };
 
   const showLoader = () => dispatch({ type: SHOW_LOADER });
 
