@@ -4,9 +4,10 @@ import { todoReducer } from "./todoReducer";
 import {
   ADD_TODO,
   CLEAR_ERROR,
+  FETCH_TODOS,
   HIDE_LOADER,
   REMOVE_TODO,
-  SHOW_ERROR,
+  SHOW_ERROR, SHOW_LOADER,
   UPDATE_TODO
 } from "../types";
 import { ScreenContext } from "../screen/screenContext";
@@ -31,7 +32,6 @@ export const TodoState = ({ children }) => {
       }
     );
     const data = await response.json();
-    console.log('id', data.name);
     dispatch({ type: ADD_TODO, title, id: data.name });
   };
 
@@ -58,9 +58,25 @@ export const TodoState = ({ children }) => {
     );
   };
 
+  const fetchTodos = async () => {
+    showLoader()
+    const response = await fetch(
+      "https://rn-todo-app-10052.firebaseio.com/todos.json",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    const data = await response.json();
+    // console.log("Fetch data", data);
+    const todos = Object.keys(data).map(key => ({ ...data[key], id: key }));
+    dispatch({ type: FETCH_TODOS, todos });
+    hideLoader()
+  };
+
   const updateTodo = (id, title) => dispatch({ type: UPDATE_TODO, id, title });
 
-  const showLoader = () => dispatch({ type: SHOW_ERROR });
+  const showLoader = () => dispatch({ type: SHOW_LOADER });
 
   const hideLoader = () => dispatch({ type: HIDE_LOADER });
 
@@ -72,9 +88,12 @@ export const TodoState = ({ children }) => {
     <TodoContext.Provider
       value={{
         todos: state.todos,
+        loading: state.loading,
+        error: state.error,
         addTodo,
         removeTodo,
-        updateTodo
+        updateTodo,
+        fetchTodos
       }}
     >
       {children}
