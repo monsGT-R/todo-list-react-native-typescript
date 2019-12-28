@@ -9,29 +9,6 @@ import { ScreenContext } from "./context/screen/screenContext";
 export const MainLayout = () => {
   const { todoId } = useContext(ScreenContext);
 
-  // const removeTodo = id => {
-  //   const todo = todos.find(todo => todo.id === id);
-  //   Alert.alert(
-  //     "Удаление элемента",
-  //     `Вы уверены что хотите удалить "${todo.title}"?`,
-  //     [
-  //       {
-  //         text: "Отмена",
-  //         style: "cancel"
-  //       },
-  //       {
-  //         text: "Удалить",
-  //         style: "destructive",
-  //         onPress: () => {
-  //           setTodoId(null);
-  //           setTodos(prevState => prevState.filter(todo => todo.id !== id));
-  //         }
-  //       }
-  //     ],
-  //     { cancelable: false }
-  //   );
-  // };
-
   return (
     <View>
       <Navbar title="Todo app" />
