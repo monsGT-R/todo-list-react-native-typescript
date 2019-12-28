@@ -49,8 +49,19 @@ export const TodoState = ({ children }) => {
         {
           text: "Удалить",
           style: "destructive",
-          onPress: () => {
+          onPress: async () => {
             changeScreen(null);
+
+            clearError();
+            try {
+              await fetch(`https://rn-todo-app-10052.firebaseio.com/todos/${id}.json`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+              });
+            } catch (e) {
+              showError("Что-то пошло не так...");
+              console.log(e);
+            }
             dispatch({ type: REMOVE_TODO, id });
           }
         }
